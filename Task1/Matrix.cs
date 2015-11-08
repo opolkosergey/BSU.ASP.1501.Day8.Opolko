@@ -27,21 +27,17 @@ namespace Task1
 
         public void SetElement(int i, int j, T element)
         {
-            if (i != j)
+            if (i != j && GetTypeMatrix(numbers) == typeof(DiagonalMatrix<T>))
                 throw new InvalidOperationException();
+            if (GetTypeMatrix(numbers) == typeof(SimmetricMatrix<T>))
+                numbers[j][i] = element;
             numbers[i][j] = element;
                 OnElementChanged(i,j);
         }
 
-        public T GetElement(int i, int j)
-        {
-            return numbers[i][j];
-        }
+        public T GetElement(int i, int j) => numbers[i][j];
 
-        public int GetSize()
-        {
-            return numbers.Length;
-        }
+        public int GetSize() => numbers.Length;
         
         public Type GetTypeMatrix(T[][] inputs)
         {
