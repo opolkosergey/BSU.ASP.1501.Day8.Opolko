@@ -12,19 +12,39 @@ namespace Task1
         {
             if (matrix == null) throw new ArgumentNullException(nameof(matrix));
             if (other == null) throw new ArgumentNullException(nameof(other));
-            if (matrix.GetType() != other.GetType() || matrix.GetSize() != other.GetSize())
+            if (matrix.GetType() != other.GetType() || matrix.Size() != other.Size())
                 throw new InvalidOperationException();
 
-            var n = matrix.GetSize();
+            var n = matrix.Size();
             T[][] newMatrixValues = new T[n][];
             for (int i = 0; i < n; i++)
                 newMatrixValues[i] = new T[n];
 
+            try
+            {
+                for (int i = 0; i < n; i++)
+                    for (int j = 0; j < n; j++)
+                        newMatrixValues[i][j] = (dynamic)matrix[i, j] + other[i, j];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return MatrixFactory.GetMatrix(newMatrixValues, matrix.GetType());
+        }
+
+        public static T[][] Copy<T>(this T[][] array)
+        {
+            int n = array.Length;
+            T[][] copy = new T[n][];
+            for (int i = 0; i < n; i++)
+                copy[i] = new T[n];
+
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++)
-                    newMatrixValues[i][j] = (dynamic)matrix.GetElement(i, j) + other.GetElement(i, j);
-
-            return MatrixFactory.GetMatrix(newMatrixValues,matrix.GetType());
+                    copy[i][j] = array[i][j];
+            return copy;
         }
     }
 }
